@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#5b2a86">
+  <title>PrintEase | Printing Orders & Transactions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN / REGISTER -->
+<section id="authScreen" class="auth-screen">
+  <div class="auth-decoration one"></div><div class="auth-decoration two"></div>
+  <div class="auth-card">
+    <div class="brand brand-center">
+      <div class="logo-icon">🖨️</div>
+      <div><h1>Print<span>Ease</span></h1><p>Printing Orders & Transactions</p></div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-mode="login">Login</button>
+      <button class="auth-tab" data-mode="register">Register</button>
+    </div>
+
+    <form id="authForm">
+      <div id="registerNameWrap" class="field hidden">
+        <label>Full Name</label>
+        <input id="authName" placeholder="Enter your full name">
+      </div>
+      <div class="field"><label>Username</label><input id="authUser" placeholder="Enter username" required></div>
+      <div class="field"><label>Password</label><div class="password-wrap"><input id="authPass" type="password" placeholder="Enter password" required><button type="button" id="togglePass">👁</button></div></div>
+      <div id="authMsg"></div>
+      <button class="btn primary full" type="submit" id="authSubmit">Login</button>
+    </form>
+    <p class="auth-note">Demo: <b>admin</b> / <b>admin</b></p>
+  </div>
+</section>
+
+<!-- APPLICATION -->
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo-icon small">🖨️</div><div class="brand-name">Print<span>Ease</span></div></div>
+    <p class="menu-label">MAIN MENU</p>
+    <nav>
+      <button class="nav-btn active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+      <button class="nav-btn" data-page="order"><span>＋</span> New Order</button>
+      <button class="nav-btn" data-page="orders"><span>📄</span> My Orders <b id="orderBadge">0</b></button>
+      <button class="nav-btn" data-page="transactions"><span>₱</span> Transactions</button>
+      <button class="nav-btn" data-page="roles"><span>♙</span> User Type</button>
+      <p class="menu-label second">ACCOUNT</p>
+      <button class="nav-btn" data-page="profile"><span>👤</span> Profile</button>
+      <button class="nav-btn" data-page="settings"><span>⚙</span> Settings</button>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">↪ Logout</button>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu">☰</button>
+      <div class="top-title"><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Manage your printing orders in one place.</p></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="quickOrder" title="New Order">＋</button>
+        <div class="user-menu"><div class="user-avatar" id="avatar">PE</div><div class="user-info"><b id="currentUser">Customer</b><small id="roleText">Customer</small></div></div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section class="page active" id="dashboard">
+      <div class="welcome-card">
+        <div><span>WELCOME BACK 👋</span><h2 id="welcomeName">Ready to print something?</h2><p>Create and track all your printing orders easily.</p><button class="btn light" data-go="order">Create New Order</button></div>
+        <div class="welcome-art">🖨️<div class="paper"></div></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card purple"><div><small>ACTIVE ORDERS</small><strong id="activeCount">0</strong><p>Currently being processed</p></div><div class="stat-icon">📋</div></div>
+        <div class="stat-card blue"><div><small>COMPLETED</small><strong id="completedCount">0</strong><p>Successfully finished</p></div><div class="stat-icon">✓</div></div>
+        <div class="stat-card green"><div><small>TRANSACTIONS</small><strong id="transactionCount">0</strong><p>Payment records</p></div><div class="stat-icon">₱</div></div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="panel recent-panel">
+          <div class="panel-header"><div><h2>Recent Orders</h2><p>Your latest printing requests</p></div><button class="text-btn" data-go="orders">View All →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>ORDER ID</th><th>TYPE</th><th>COPIES</th><th>STATUS</th></tr></thead><tbody id="recentTable"></tbody></table></div>
+        </div>
+        <div class="panel quick-panel">
+          <h2>Quick Actions</h2>
+          <button class="quick-action" data-go="order"><i>＋</i><span><b>Create Order</b><small>Submit a new print request</small></span></button>
+          <button class="quick-action" data-go="orders"><i>📄</i><span><b>Track Orders</b><small>Check order status</small></span></button>
+          <button class="quick-action" data-go="transactions"><i>₱</i><span><b>Transactions</b><small>View payment records</small></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW ORDER -->
+    <section class="page" id="order">
+      <div class="section-heading"><h2>Create Printing Order</h2><p>Fill out the details below and submit your request.</p></div>
+      <form class="order-form panel" id="orderForm">
+        <div class="form-section-title"><span>1</span> Print Details</div>
+        <div class="form-grid">
+          <div class="field"><label>Print Type</label><select id="type"><option>Document</option><option>Poster</option><option>Photo</option><option>Tarpaulin</option><option>Calling Card</option><option>Other</option></select></div>
+          <div class="field"><label>Number of Copies</label><div class="counter"><button type="button" id="minus">−</button><input id="copies" type="number" min="1" value="1"><button type="button" id="plus">＋</button></div></div>
+          <div class="field"><label>Paper Size</label><select id="size"><option>A4</option><option>Letter</option><option>A3</option><option>Legal</option></select></div>
+          <div class="field"><label>Print Color</label><select id="color"><option>Black & White</option><option>Colored</option></select></div>
+          <div class="field"><label>Paper Type</label><select id="paper"><option>Standard</option><option>Glossy</option><option>Photo Paper</option><option>Cardstock</option></select></div>
+          <div class="field"><label>Estimated Price</label><div class="price-preview">₱<span id="estimatedPrice">10.00</span></div></div>
+        </div>
+
+        <div class="form-section-title"><span>2</span> File & Instructions</div>
+        <div class="field">
+          <label class="upload-area">📁<b>Upload your file</b><small>PDF, DOCX, JPG or PNG</small><input id="file" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></label>
+          <div id="fileName" class="file-name"></div>
+        </div>
+        <div class="field"><label>Special Instructions</label><textarea id="notes" placeholder="Example: Please print double-sided..."></textarea></div>
+        <div class="form-actions"><button class="btn secondary" type="button" data-go="dashboard">Cancel</button><button class="btn primary" type="submit">Submit Order →</button></div>
+      </form>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="page" id="orders">
+      <div class="section-heading row-heading"><div><h2>My Orders</h2><p>Track and manage your printing requests.</p></div><button class="btn primary" data-go="order">＋ New Order</button></div>
+      <div class="filter-bar panel"><input id="searchOrders" placeholder="🔎 Search Order ID or Type..."><select id="filterStatus"><option value="All">All Status</option><option>Processing</option><option>Ready</option><option>Completed</option></select></div>
+      <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>ORDER ID</th><th>TYPE</th><th>DETAILS</th><th>PRICE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div>
+    </section>
+
+    <!-- TRANSACTIONS -->
+    <section class="page" id="transactions">
+      <div class="section-heading"><h2>Transactions</h2><p>Records are automatically created when an order is completed.</p></div>
+      <div class="transaction-summary"><div class="mini-card"><small>TOTAL TRANSACTIONS</small><strong id="totalTransactions">0</strong></div><div class="mini-card"><small>TOTAL SALES</small><strong>₱<span id="totalSales">0.00</span></strong></div></div>
+      <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>TRANSACTION ID</th><th>ORDER ID</th><th>TYPE</th><th>AMOUNT</th><th>STATUS</th><th>DATE</th></tr></thead><tbody id="transTable"></tbody></table></div></div>
+    </section>
+
+    <!-- USER TYPE -->
+    <section class="page" id="roles">
+      <div class="section-heading"><h2>Select User Type</h2><p>Choose a role for the current session.</p></div>
+      <div class="role-grid">
+        <button class="role-card selected" data-role="Customer"><div class="role-icon">👤</div><h3>Customer</h3><p>Create orders and track your printing requests.</p><span>Choose Role →</span></button>
+        <button class="role-card" data-role="Admin"><div class="role-icon">🛡️</div><h3>Admin</h3><p>Manage orders and update printing status.</p><span>Choose Role →</span></button>
+        <button class="role-card" data-role="Transactor"><div class="role-icon">💳</div><h3>Transactor</h3><p>Record and monitor completed transactions.</p><span>Choose Role →</span></button>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="page" id="profile">
+      <div class="section-heading"><h2>My Profile</h2><p>Manage your account information.</p></div>
+      <div class="profile-layout">
+        <div class="profile-card panel"><div class="big-avatar" id="bigAvatar">PE</div><h3 id="profileDisplay">Customer</h3><p>PrintEase User</p><button class="btn secondary" id="changeAvatar">Change Avatar</button></div>
+        <form class="panel profile-form" id="profileForm">
+          <h2>Personal Information</h2>
+          <div class="form-grid"><div class="field"><label>Username</label><input id="profileUser"></div><div class="field"><label>Full Name</label><input id="profileName" placeholder="Enter full name"></div><div class="field"><label>Contact Number</label><input id="profileContact" placeholder="09XX XXX XXXX"></div><div class="field"><label>Email Address</label><input id="profileEmail" type="email" placeholder="example@email.com"></div></div>
+          <button class="btn primary" type="submit">Save Changes</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="settings">
+      <div class="section-heading"><h2>Settings</h2><p>Customize your PrintEase experience.</p></div>
+      <div class="panel settings-panel">
+        <div class="setting-row"><div><b>Dark Mode</b><p>Change the appearance of the application.</p></div><label class="switch"><input id="darkMode" type="checkbox"><span></span></label></div>
+        <div class="setting-row"><div><b>Notifications</b><p>Receive alerts about your orders.</p></div><label class="switch"><input id="notifications" type="checkbox" checked><span></span></label></div>
+        <div class="setting-row"><div><b>Language</b><p>Select your preferred language.</p></div><select id="language"><option>English</option><option>Filipino</option></select></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
