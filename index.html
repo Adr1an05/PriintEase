@@ -169,5 +169,13 @@
 
 <div id="toast"></div>
 <script src="script.js"></script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/PriintEase/service-worker.js")
+      .catch(error => console.error("Service worker registration failed:", error));
+  });
+}
+  </script>
 </body>
 </html>
