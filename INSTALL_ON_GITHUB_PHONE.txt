@@ -1,0 +1,38 @@
+PRINT EASE PWA ADD-ON — PHONE INSTRUCTIONS
+
+Repository: https://github.com/Adr1an05/PriintEase
+Published URL: https://adr1an05.github.io/PriintEase/
+
+UPLOAD TO THE ROOT OF THE REPOSITORY:
+- manifest.json
+- service-worker.js
+- icons/icon-192.png
+- icons/icon-512.png
+
+EDIT index.html:
+1) In <head>, add:
+<link rel="manifest" href="/PriintEase/manifest.json">
+<meta name="theme-color" content="#5b2a86">
+<link rel="apple-touch-icon" href="/PriintEase/icons/icon-192.png">
+
+2) Find <script src="script.js"></script> near the bottom.
+Immediately AFTER it, add:
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/PriintEase/service-worker.js")
+      .catch(error => console.error("Service worker registration failed:", error));
+  });
+}
+</script>
+
+3) Commit/save the changes on the main branch and wait for GitHub Pages to publish.
+
+4) On Android, open in Chrome:
+https://adr1an05.github.io/PriintEase/
+Open the three-dot menu and choose "Install app" or "Add to Home screen".
+
+IMPORTANT:
+- Keep the /PriintEase/ path because this is a GitHub project site.
+- GitHub Pages only serves static HTML/CSS/JS; it does not execute PHP or MySQL.
+- The service worker caches the app shell so it can open offline, but shared user accounts/orders require an online backend and database.
